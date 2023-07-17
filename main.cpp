@@ -28,9 +28,7 @@ int main() {
         ui::makeLine(dirs.front().path().filename(), end);
         dirs.pop();
 
-        if (dirs.empty()){
-            dirs.swap(files);
-        }
+        if (dirs.empty()){ dirs.swap(files); }
     }
 
     ui::endBox();

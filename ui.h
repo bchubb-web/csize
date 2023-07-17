@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <string>
 
 class ui {
     public:
@@ -30,21 +31,27 @@ class ui {
 
         static std::string readableBytes(uintmax_t size) {
             std::string metric;
+            std::string shortSize;
 
             int factor = std::log(size) / std::log(1024);
-
-            std::cout << factor;
 
             switch (factor) {
                 case 0:
                     metric="b";
+                    shortSize = size;
+                    break;
                 case 1:
                     metric="kb";
+                    shortSize = size;
+                    break;
                 case 2:
                     metric="mb";
+                    break;
                 case 3:
                     metric="gb";
+                    break;
+
             }
-            return metric;
+            return std::to_string(size).at(0) + metric;
         }
 };
