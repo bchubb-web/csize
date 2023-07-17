@@ -19,7 +19,7 @@ int main() {
     ui::makeLine();
 
     while(!dirs.empty()){
-        std::string end = "#";
+        std::string end = "-";
 
         if (!dirs.front().is_directory()){
             end = ui::readableBytes(dirs.front().file_size());
