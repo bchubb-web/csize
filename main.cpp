@@ -1,34 +1,37 @@
-#include <algorithm>
-#include <cstdint>
 #include <iostream>
 #include <filesystem>
-#include <string>
-#include"ui.cpp"
+#include <queue>
+#include"ui.h"
 
 
 int main() {
-    int totalSize;
-    int fileCount;
-    int width = 48;
 
     std::string path = std::filesystem::current_path();
+    std::queue<std::filesystem::directory_entry> files, dirs;
 
-    for (const auto & entry : std::filesystem::directory_iterator(path)) {
-        if (!entry.is_directory()){
-            totalSize += entry.file_size();
-            fileCount++;
-        }
+    for (const auto &entry : std::filesystem::directory_iterator(path)) {
+        entry.is_directory() ? dirs.push(entry) : files.push(entry);
     }
-    //        or { "─", "│", "─", "│", "╭", "╮", "╯", "╰" }
-    std::string files[fileCount];
+
     ui::startBox();
-    std::cout << "|                                                               │" << std::endl;
-    std::cout << "Total path size: " << totalSize << std::endl;
-    std::cout << "Number of files: " << fileCount << std::endl;
-    for (const auto & entry : std::filesystem::directory_iterator(path)) {
-        if (!entry.is_directory()){
-            ui::makeLine(entry.path(), entry.file_size());
+
+    ui::makeLine("cSize - file system measurement tool");
+    ui::makeLine();
+
+    while(!dirs.empty()){
+        std::string end = "#";
+
+        if (!dirs.front().is_directory()){
+            end = ui::readableBytes(dirs.front().file_size());
+        }
+
+        ui::makeLine(dirs.front().path().filename(), end);
+        dirs.pop();
+
+        if (dirs.empty()){
+            dirs.swap(files);
         }
     }
+
     ui::endBox();
 }
