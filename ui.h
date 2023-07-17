@@ -3,55 +3,71 @@
 #include <string>
 
 class ui {
+    protected:
+        int length;
+
+        
     public:
-        static void startBox() {
-            std::cout << "╭──────────────────────────────────────────────────────────────────╮" << std::endl;
+        ui(int length) {
+            if(length > 40) {
+                // border, length, padding, fileSize
+                this->length = 2 + length + 2 + 4;
+            } else {
+                this->length = 48;
+            }
+        }
+
+        void border(std::string pos = "top") {
+            std::string line;
+            for (int i=0;i<this->length+2;i++) {
+                line+="─";
+            }
+            if (pos == "top") {
+                std::cout << "╭" << line << "╮" << std::endl;
+            } else {
+                std::cout << "╰" << line << "╯" << std::endl;
+            }
         };
 
-
-
-        static void makeLine( std::string start="", std::string end="") {
+        void line( std::string start="", std::string end="") {
             int gapSize;
             std::string whiteSpace;
             std::string content;
 
-            gapSize = 64 - (start.length() + end.length());
-
+            gapSize = this->length - (start.length() + end.length());
+            //std::cout << this->length << std::endl;
+            //std::cout << gapSize << std::endl;
             for (int i = 0; i < gapSize; i++) {
                 whiteSpace += " ";
             }
 
-            std::cout << "│ " << start <<  whiteSpace << end << " │" << std::endl;
+            std::cout << "│ " << start << whiteSpace << end << " │" << std::endl;
         };
 
-
-        static void endBox() {
-            std::cout << "╰──────────────────────────────────────────────────────────────────╯" << std::endl;
-        };
-
-        static std::string readableBytes(uintmax_t size) {
+        static std::string readable(uintmax_t fileSize) {
             std::string metric;
             std::string shortSize;
 
-            int factor = std::log(size) / std::log(1024);
+            double rawFactor = std::log(fileSize) / std::log(1024);
+            int factor = (int)std::round(rawFactor);
 
             switch (factor) {
                 case 0:
-                    metric="b";
-                    shortSize = size;
+                    shortSize = std::to_string(fileSize);
                     break;
                 case 1:
-                    metric="kb";
-                    shortSize = size;
+                    metric="k";
+                    shortSize = std::to_string(fileSize /(1024 * factor));
                     break;
                 case 2:
-                    metric="mb";
+                    metric="m";
+                    shortSize = std::to_string(fileSize);
                     break;
                 case 3:
-                    metric="gb";
+                    metric="g";
+                    shortSize = std::to_string(fileSize);
                     break;
-
             }
-            return std::to_string(size).at(0) + metric;
+            return shortSize + metric + "b";
         }
 };
