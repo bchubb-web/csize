@@ -1,8 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <string>
-#include "Ui.h"
-
+#include "ui.h"
 
 Ui::Ui(int length) {
     if(length > 40) {
@@ -21,9 +20,9 @@ void Ui::border(std::string pos) {
     }
 
     if (pos == "top") {
-        std::cout << "╭" << line << "╮" << std::endl;
+        std::cout << "╭" << line << "╮\n";
     } else {
-        std::cout << "╰" << line << "╯" << std::endl;
+        std::cout << "╰" << line << "╯\n";
     }
 };
 
@@ -44,12 +43,10 @@ std::string Ui::readable(uintmax_t fileSize) {
     std::string metric;
     std::string shortSize;
     double rawFactor;
-    int factor;
 
     rawFactor = std::log(fileSize) / std::log(1024);
-    factor = (int)std::round(rawFactor);
 
-    switch (factor - 1) {
+    switch ((int)std::round(rawFactor) - 1) {
         case 0:
             metric="b";
             shortSize = std::to_string(fileSize);
